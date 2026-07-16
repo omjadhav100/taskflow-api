@@ -1,5 +1,4 @@
-package com.taskflow.taskflow_api;
-
+package com.taskflow.taskflowapi;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
