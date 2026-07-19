@@ -1,3 +1,8 @@
-public interface Boardrepository extends Jparepository<Board,Long>{
-    List<Board>findByUserId(long userId);
+@Repository
+public class BoardRepository extends GenericInMemoryRepository{
+    public List<Board> findByUserId(Long userId){
+        return findAll().stream()
+        .filter(b->b.getUserId().equals(userId))
+        .collect(Collectors.toList());
+    }
 }
