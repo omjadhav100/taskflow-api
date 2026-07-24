@@ -15,8 +15,8 @@ public class Board extends BaseEntity {
     // NOTE: no User relationship yet since auth isn't built (that's a later day).
     // Add "@ManyToOne private User user;" once Spring Security/JWT is wired in.
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TaskList> lists = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+private List<TaskList> lists = new ArrayList<>();
 
     public String getTitle() {
         return title;
