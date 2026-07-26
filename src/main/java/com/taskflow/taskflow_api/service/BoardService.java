@@ -5,6 +5,9 @@ import com.taskflow.taskflow_api.dto.CreateBoardRequest;
 import com.taskflow.taskflow_api.entity.Board;
 import com.taskflow.taskflow_api.exception.BoardNotFoundException;
 import com.taskflow.taskflow_api.repository.BoardRepository;
+
+import main.java.com.taskflow.taskflow_api.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,9 +17,11 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
+     private final UserRepository userRepository;
 
     public BoardService(BoardRepository boardRepository) {
         this.boardRepository = boardRepository;
+        this.userRepository = userRepository;
     }
 
     public List<BoardResponseDTO> getAllBoards() {
@@ -34,6 +39,7 @@ public class BoardService {
     public BoardResponseDTO createBoard(CreateBoardRequest request) {
         Board board = new Board();
         board.setTitle(request.getTitle());
+         board.setUser(user);
         Board saved = boardRepository.save(board);
         return new BoardResponseDTO(saved);
     }
