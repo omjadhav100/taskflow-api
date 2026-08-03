@@ -25,20 +25,21 @@ public class BoardController {
         return boardService.getAllBoards();
     }
 
-    @GetMapping("/{id}")
-    public BoardResponseDTO getBoard(@PathVariable Long id) {
-        return boardService.getBoard(id);
-    }
-    @GetMapping("/{id}")
-public BoardResponseDTO getBoardAgain(@PathVariable Long id) {
-    return boardService.getBoardAgain(id);
- }
-
+   
+@GetMapping
+public List<BoardResponseDTO> getMyBoards(@AuthenticationPrincipal User currentUser) {
+    return boardService.getBoardsForUser(currentUser.getId());
+}
+//     @GetMapping("/{id}")
+// public BoardResponseDTO getBoardAgain(@PathVariable Long id) {
+//     return boardService.getBoardAgain(id);
+//  }
     @PostMapping
-    public BoardResponseDTO createBoard(@RequestBody CreateBoardRequest request) {
-        return boardService.createBoard(request);
-    }
-
+public BoardResponseDTO createBoard(@Valid @RequestBody CreateBoardRequest request,
+                                     @AuthenticationPrincipal User currentUser) {
+    return boardService.createBoard(currentUser.getId(), request);
+}
+   
     @PutMapping("/{id}")
     public BoardResponseDTO updateBoard(@PathVariable Long id,
                                          @RequestBody CreateBoardRequest request) {
