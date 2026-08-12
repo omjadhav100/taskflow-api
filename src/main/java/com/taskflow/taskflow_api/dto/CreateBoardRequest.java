@@ -1,22 +1,17 @@
 package com.taskflow.taskflow_api.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class CreateBoardRequest {
- @NotBlank(message = "Title is required")
+
+    @NotBlank(message = "Title is required")
     @Size(max = 100, message = "Title must be under 100 characters")
     private String title;
 
-    public CreateBoardRequest() {
-    }
+    public CreateBoardRequest() {}
+    public CreateBoardRequest(String title) { this.title = title; }
 
-    public CreateBoardRequest(String title) {
-        this.title = title;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 }

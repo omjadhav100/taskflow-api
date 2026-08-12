@@ -1,4 +1,15 @@
 package com.taskflow.taskflow_api.service;
+
+import com.taskflow.taskflow_api.dto.AuthResponse;
+import com.taskflow.taskflow_api.dto.LoginRequest;
+import com.taskflow.taskflow_api.dto.RegisterRequest;
+import com.taskflow.taskflow_api.entity.User;
+import com.taskflow.taskflow_api.repository.UserRepository;
+import com.taskflow.taskflow_api.security.JwtUtil;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 @Service
 public class AuthService {
 
@@ -11,18 +22,21 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
-    public AuthResponse register(RegisterRequest request){
-        if(userRepository.findByEmail(request.getEmail()).isPresent()){
-            throw new IllegalArgumentException("email is registered");
+
+    public AuthResponse register(RegisterRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Email already registered");
         }
-        User user=new User();
+        User user = new User();
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(passwordEncoder.encode(request.getPassword())); // hash before saving
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userRepository.save(user);
+
         return new AuthResponse(jwtUtil.generateToken(user.getEmail()));
     }
-     public AuthResponse login(LoginRequest request) {
+
+    public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
 

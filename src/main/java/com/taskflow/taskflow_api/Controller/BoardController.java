@@ -2,7 +2,10 @@ package com.taskflow.taskflow_api.controller;
 
 import com.taskflow.taskflow_api.dto.BoardResponseDTO;
 import com.taskflow.taskflow_api.dto.CreateBoardRequest;
+import com.taskflow.taskflow_api.entity.User;
 import com.taskflow.taskflow_api.service.BoardService;
+import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,36 +16,28 @@ public class BoardController {
 
     private final BoardService boardService;
 
-    // Constructor injection - this was completely missing before.
-    // Without this, the controller had no way to talk to the database at all,
-    // which is why every method just returned null.
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
 
     @GetMapping
-    public List<BoardResponseDTO> getAllBoards() {
-        return boardService.getAllBoards();
+    public List<BoardResponseDTO> getMyBoards(@AuthenticationPrincipal User currentUser) {
+        return boardService.getBoardsForUser(currentUser.getId());
     }
 
-   
-@GetMapping
-public List<BoardResponseDTO> getMyBoards(@AuthenticationPrincipal User currentUser) {
-    return boardService.getBoardsForUser(currentUser.getId());
-}
-//     @GetMapping("/{id}")
-// public BoardResponseDTO getBoardAgain(@PathVariable Long id) {
-//     return boardService.getBoardAgain(id);
-//  }
+    @GetMapping("/{id}")
+    public BoardResponseDTO getBoard(@PathVariable Long id) {
+        return boardService.getBoard(id);
+    }
+
     @PostMapping
-public BoardResponseDTO createBoard(@Valid @RequestBody CreateBoardRequest request,
-                                     @AuthenticationPrincipal User currentUser) {
-    return boardService.createBoard(currentUser.getId(), request);
-}
-   
+    public BoardResponseDTO createBoard(@Valid @RequestBody CreateBoardRequest request,
+                                         @AuthenticationPrincipal User currentUser) {
+        return boardService.createBoard(currentUser.getId(), request);
+    }
+
     @PutMapping("/{id}")
-    public BoardResponseDTO updateBoard(@PathVariable Long id,
-                                         @RequestBody CreateBoardRequest request) {
+    public BoardResponseDTO updateBoard(@PathVariable Long id, @Valid @RequestBody CreateBoardRequest request) {
         return boardService.updateBoard(id, request);
     }
 

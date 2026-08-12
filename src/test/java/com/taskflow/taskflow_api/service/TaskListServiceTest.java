@@ -40,26 +40,18 @@ class TaskListServiceTest {
         taskListService = new TaskListService(taskListRepository, boardRepository);
     }
 
-    // ---------- createList tests ----------
-
     @Test
     void createList_shouldSaveList_whenBoardExists() {
-        // Arrange
         Board board = new Board();
         board.setId(1L);
         board.setTitle("My Board");
 
         when(boardRepository.findById(1L)).thenReturn(Optional.of(board));
-
-        // "just return whatever TaskList was passed into save()" -
-        // simulates the database handing back the saved entity
         when(taskListRepository.save(any(TaskList.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
         TaskList result = taskListService.createList(1L, "To Do");
 
-        // Assert
         assertEquals("To Do", result.getName());
         assertEquals(board, result.getBoard());
         verify(taskListRepository, times(1)).save(any(TaskList.class));
@@ -67,23 +59,17 @@ class TaskListServiceTest {
 
     @Test
     void createList_shouldThrowException_whenBoardDoesNotExist() {
-        // Arrange
         when(boardRepository.findById(999L)).thenReturn(Optional.empty());
 
-        // Act + Assert
         assertThrows(BoardNotFoundException.class, () -> {
             taskListService.createList(999L, "To Do");
         });
 
-        // Confirm it never tried to save a list for a board that doesn't exist
         verify(taskListRepository, never()).save(any());
     }
 
-    // ---------- getListsForBoard test ----------
-
     @Test
     void getListsForBoard_shouldReturnAllListsForThatBoard() {
-        // Arrange
         Board board = new Board();
         board.setId(1L);
 
@@ -99,10 +85,8 @@ class TaskListServiceTest {
 
         when(taskListRepository.findByBoardId(1L)).thenReturn(Arrays.asList(list1, list2));
 
-        // Act
         List<TaskList> result = taskListService.getListsForBoard(1L);
 
-        // Assert
         assertEquals(2, result.size());
         assertEquals("To Do", result.get(0).getName());
         assertEquals("Done", result.get(1).getName());

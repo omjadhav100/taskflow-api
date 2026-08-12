@@ -15,8 +15,6 @@ public class TaskList extends BaseEntity {
     private String name;
     private int position;
 
-    // This REPLACES the old "Long boardId" field.
-    // @ManyToOne owns the foreign key - Hibernate creates a "board_id" column on this table.
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
@@ -24,35 +22,12 @@ public class TaskList extends BaseEntity {
     @OneToMany(mappedBy = "taskList", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks = new ArrayList<>();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+    public int getPosition() { return position; }
+    public void setPosition(int position) { this.position = position; }
+    public Board getBoard() { return board; }
+    public void setBoard(Board board) { this.board = board; }
+    public List<Task> getTasks() { return tasks; }
+    public void setTasks(List<Task> tasks) { this.tasks = tasks; }
 }

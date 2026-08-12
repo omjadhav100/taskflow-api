@@ -3,7 +3,6 @@ package com.taskflow.taskflow_api.exception;
 import java.time.LocalDateTime;
 
 public class ErrorResponse {
-
     private int status;
     private String message;
     private LocalDateTime timestamp = LocalDateTime.now();
@@ -13,15 +12,7 @@ public class ErrorResponse {
         this.message = message;
     }
 
-    public int getStatus() {
-        return status;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
+    public int getStatus() { return status; }
+    public String getMessage() { return message; }
+    public LocalDateTime getTimestamp() { return timestamp; }
 }

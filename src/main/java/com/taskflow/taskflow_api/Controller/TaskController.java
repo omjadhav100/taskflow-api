@@ -23,10 +23,7 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@PathVariable Long listId,
-                            @RequestBody CreateBoardRequest request) {
-        // Reusing CreateBoardRequest's "title" field shape here is a shortcut -
-        // consider making a dedicated CreateTaskRequest DTO once you add more Task fields.
+    public Task createTask(@PathVariable Long listId, @RequestBody CreateBoardRequest request) {
         return taskService.createTask(listId, request.getTitle());
     }
 }

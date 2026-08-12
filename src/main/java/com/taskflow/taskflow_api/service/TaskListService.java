@@ -15,8 +15,7 @@ public class TaskListService {
     private final TaskListRepository taskListRepository;
     private final BoardRepository boardRepository;
 
-    public TaskListService(TaskListRepository taskListRepository,
-                            BoardRepository boardRepository) {
+    public TaskListService(TaskListRepository taskListRepository, BoardRepository boardRepository) {
         this.taskListRepository = taskListRepository;
         this.boardRepository = boardRepository;
     }
@@ -27,7 +26,7 @@ public class TaskListService {
 
         TaskList list = new TaskList();
         list.setName(name);
-        list.setBoard(board); // setting the real Board object, not just an id
+        list.setBoard(board);
         return taskListRepository.save(list);
     }
 

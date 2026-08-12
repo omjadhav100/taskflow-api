@@ -3,11 +3,10 @@ package com.taskflow.taskflow_api.service;
 import com.taskflow.taskflow_api.dto.BoardResponseDTO;
 import com.taskflow.taskflow_api.dto.CreateBoardRequest;
 import com.taskflow.taskflow_api.entity.Board;
+import com.taskflow.taskflow_api.entity.User;
 import com.taskflow.taskflow_api.exception.BoardNotFoundException;
 import com.taskflow.taskflow_api.repository.BoardRepository;
-
-import main.java.com.taskflow.taskflow_api.repository.UserRepository;
-
+import com.taskflow.taskflow_api.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,15 +16,15 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-     private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public BoardService(BoardRepository boardRepository) {
+    public BoardService(BoardRepository boardRepository, UserRepository userRepository) {
         this.boardRepository = boardRepository;
         this.userRepository = userRepository;
     }
 
-    public List<BoardResponseDTO> getAllBoards() {
-        return boardRepository.findAll().stream()
+    public List<BoardResponseDTO> getBoardsForUser(Long userId) {
+        return boardRepository.findByUserId(userId).stream()
                 .map(BoardResponseDTO::new)
                 .collect(Collectors.toList());
     }
@@ -36,10 +35,13 @@ public class BoardService {
         return new BoardResponseDTO(board);
     }
 
-    public BoardResponseDTO createBoard(CreateBoardRequest request) {
+    public BoardResponseDTO createBoard(Long userId, CreateBoardRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Board board = new Board();
         board.setTitle(request.getTitle());
-         board.setUser(user);
+        board.setUser(user);
         Board saved = boardRepository.save(board);
         return new BoardResponseDTO(saved);
     }

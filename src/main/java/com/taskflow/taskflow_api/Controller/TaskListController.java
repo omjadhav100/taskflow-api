@@ -3,6 +3,7 @@ package com.taskflow.taskflow_api.controller;
 import com.taskflow.taskflow_api.dto.CreateListRequest;
 import com.taskflow.taskflow_api.entity.TaskList;
 import com.taskflow.taskflow_api.service.TaskListService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,7 @@ public class TaskListController {
     }
 
     @PostMapping
-    public TaskList createList(@PathVariable Long boardId,
-                                @RequestBody CreateListRequest request) {
+    public TaskList createList(@PathVariable Long boardId, @Valid @RequestBody CreateListRequest request) {
         return taskListService.createList(boardId, request.getName());
     }
 }
