@@ -10,8 +10,11 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:5173")
+           .allowedOrigins(
+                        "http://localhost:5173",
+                        "https://taskflow-frontend-xxxx.onrender.com" // replace with your real deployed frontend URL
+                )
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("*");
+                .allowedHeaders("*");    
     }
 }
