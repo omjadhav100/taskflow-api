@@ -5,6 +5,7 @@ import com.taskflow.taskflow_api.dto.CreateBoardRequest;
 import com.taskflow.taskflow_api.entity.Board;
 import com.taskflow.taskflow_api.entity.User;
 import com.taskflow.taskflow_api.exception.BoardNotFoundException;
+import com.taskflow.taskflow_api.exception.UnauthorizedAccessException;
 import com.taskflow.taskflow_api.repository.BoardRepository;
 import com.taskflow.taskflow_api.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -46,18 +47,24 @@ public class BoardService {
         return new BoardResponseDTO(saved);
     }
 
-    public BoardResponseDTO updateBoard(Long id, CreateBoardRequest request) {
+    public BoardResponseDTO updateBoard(Long id, CreateBoardRequest request,Long currentUserId) {
         Board board = boardRepository.findById(id)
                 .orElseThrow(() -> new BoardNotFoundException(id));
-        board.setTitle(request.getTitle());
+        if(!board.getUser().getId().equals(currentUserId)){
+            throw new UnauthorizedAccessException("You do not have permission to edit this board");
+        }
+         board.setTitle(request.getTitle());
         Board saved = boardRepository.save(board);
         return new BoardResponseDTO(saved);
     }
 
-    public void deleteBoard(Long id) {
-        if (!boardRepository.existsById(id)) {
-            throw new BoardNotFoundException(id);
+    public void deleteBoard(Long id,Long currentUserId) {
+         Board board = boardRepository.findById(id)
+          .orElseThrow(() -> new BoardNotFoundException(id));
+            if (!board.getUser().getId().equals(currentUserId)) {
+            throw new UnauthorizedAccessException("You do not have permission to delete this board");
         }
+ 
         boardRepository.deleteById(id);
     }
 }

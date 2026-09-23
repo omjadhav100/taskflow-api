@@ -95,10 +95,10 @@ class BoardServiceTest {
 
     @Test
     void deleteBoard_shouldThrowException_whenBoardDoesNotExist() {
-        when(boardRepository.existsById(999L)).thenReturn(false);
+        when(boardRepository.findById(999L)).thenReturn(Optional.empty());
 
         assertThrows(BoardNotFoundException.class, () -> {
-            boardService.deleteBoard(999L);
+            boardService.deleteBoard(999L, 1L);
         });
 
         verify(boardRepository, never()).deleteById(any());

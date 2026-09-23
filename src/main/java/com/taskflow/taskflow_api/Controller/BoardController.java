@@ -37,12 +37,14 @@ public class BoardController {
     }
 
     @PutMapping("/{id}")
-    public BoardResponseDTO updateBoard(@PathVariable Long id, @Valid @RequestBody CreateBoardRequest request) {
-        return boardService.updateBoard(id, request);
+    public BoardResponseDTO updateBoard(@PathVariable Long id,
+                                         @Valid @RequestBody CreateBoardRequest request,
+                                         @AuthenticationPrincipal User currentUser) {
+        return boardService.updateBoard(id, request, currentUser.getId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteBoard(@PathVariable Long id) {
-        boardService.deleteBoard(id);
+    public void deleteBoard(@PathVariable Long id, @AuthenticationPrincipal User currentUser) {
+        boardService.deleteBoard(id, currentUser.getId());
     }
 }
