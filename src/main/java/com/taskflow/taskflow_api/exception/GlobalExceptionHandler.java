@@ -40,7 +40,7 @@ public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedAccessExcept
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneral(Exception ex) {
-            ex.printStackTrace();
+          
         ErrorResponse error = new ErrorResponse(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Something went wrong. Please try again.");
