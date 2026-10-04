@@ -15,4 +15,6 @@ COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "app.jar"]
+# TEMPORARY DEBUG LINE: prints whether DB_URL actually arrived,
+# without printing the real password. Remove this line once confirmed working.
+CMD ["sh", "-c", "echo '--- DEBUG: DB_URL is =' $DB_URL '---' && echo '--- DEBUG: DB_USERNAME is =' $DB_USERNAME '---' && java -jar app.jar"]
